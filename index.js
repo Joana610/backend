@@ -1,3 +1,7 @@
+import homeRoutes from "./routes/home.js";
+
+app.use("/", homeRoutes);
+
 const express = require("express");
 const app = express();
 
