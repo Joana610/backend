@@ -10,11 +10,11 @@ const app = express();
 app.use(express.json());
 
 app.use("/", homeRoutes);       
-app.use("/mjesta", mjestaRoutes);
-app.use("/kategorije", kategorijeRoutes);
-app.use("/komentari", komentariRoutes);
+app.use("/", mjestaRoutes);
+app.use("/", kategorijeRoutes);
+app.use("/", komentariRoutes);
 app.use("/", posjecenoRoutes);
-app.use("/korisnici", korisniciRoutes);
+app.use("/", korisniciRoutes);
 
 
 app.get("/test", (req, res) => {
