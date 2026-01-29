@@ -1,14 +1,11 @@
-const express = require("express");
-const homeRoutes = require("./routes/home");
+import express from "express";
+import homeRoutes from "./routes/home.js";
 
 const app = express();
-
 app.use(express.json());
 
-// rute
 app.use("/", homeRoutes);
 
-// test ruta (može ostati)
 app.get("/test", (req, res) => {
   res.json({ ok: true });
 });
