@@ -13,7 +13,7 @@ app.use("/", homeRoutes);
 app.use("/mjesta", mjestaRoutes);
 app.use("/kategorije", kategorijeRoutes);
 app.use("/komentari", komentariRoutes);
-app.use("/posjeceno", posjecenoRoutes);
+app.use("/", posjecenoRoutes);
 app.use("/korisnici", korisniciRoutes);
 
 
