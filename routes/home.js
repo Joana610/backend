@@ -3,13 +3,21 @@ import db from "../db.js";
 
 const router = express.Router();
 
-// GET /gradovi
 router.get("/gradovi", async (req, res) => {
-  const [rows] = await db.query(
-    "SELECT id_grada, naziv_grada FROM grad"
-  );
-  res.json(rows);
+  try {
+    const [rows] = await db.query(
+      "SELECT id_grada, naziv_grada FROM grad"
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error("GRESKA /gradovi:", err);
+    res.status(500).json({
+      error: "DB error",
+      details: err.message
+    });
+  }
 });
+
 
 // GET /kategorije
 router.get("/kategorije", async (req, res) => {
