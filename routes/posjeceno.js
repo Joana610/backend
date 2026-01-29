@@ -3,6 +3,22 @@ import db from "../db.js";
 
 const router = express.Router();
 
+// GET /posjeceno/:firebase_uid
+router.get("/:firebase_uid", async (req, res) => {
+  const { firebase_uid } = req.params;
+
+  const [rows] = await db.query(`
+    SELECT m.id_mjesta, m.slika
+    FROM posjeceno p
+    JOIN korisnik k ON p.id_korisnika = k.id_korisnika
+    JOIN mjesto m ON p.id_mjesta = m.id_mjesta
+    WHERE k.firebase_uid = ?
+  `, [firebase_uid]);
+
+  res.json(rows); 
+});
+
+
 // GET /posjeceno/:id_mjesta/:firebase_uid
 router.get("/:id_mjesta/:firebase_uid", async (req, res) => {
   const { id_mjesta, firebase_uid } = req.params;
