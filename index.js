@@ -1,10 +1,12 @@
 import express from "express";
 import homeRoutes from "./routes/home.js";
+import posjecenoRoutes from "./routes/posjeceno.js";
 
 const app = express();
 app.use(express.json());
 
 app.use("/", homeRoutes);
+app.use("/", posjecenoRoutes);
 
 app.get("/test", (req, res) => {
   res.json({ ok: true });
