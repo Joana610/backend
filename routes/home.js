@@ -1,5 +1,5 @@
-const express = require("express");
-const db = require("../db");
+import express from "express";
+import db from "../db.js";
 
 const router = express.Router();
 
@@ -55,4 +55,4 @@ router.get("/mjesta/kategorija/:id", async (req, res) => {
   res.json(rows);
 });
 
-module.exports = router;
+export default router;
