@@ -1,18 +1,14 @@
-import homeRoutes from "./routes/home.js";
-
-app.use("/", homeRoutes);
-
 const express = require("express");
+const homeRoutes = require("./routes/home");
+
 const app = express();
-
-console.log("DB_HOST:", process.env.DB_HOST);
-console.log("DB_USER:", process.env.DB_USER);
-console.log("DB_NAME:", process.env.DB_NAME);
-
 
 app.use(express.json());
 
-// 👇 OVDJE DODAJEŠ
+// rute
+app.use("/", homeRoutes);
+
+// test ruta (može ostati)
 app.get("/test", (req, res) => {
   res.json({ ok: true });
 });
