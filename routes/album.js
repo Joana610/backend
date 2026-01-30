@@ -63,4 +63,58 @@ router.delete("/:id_objave", async (req, res) => {
   }
 });
 
+
+// POST /album
+router.post("/album", async (req, res) => {
+  const {
+    firebase_uid,
+    naziv,
+    opis,
+    slika1,
+    slika2,
+    slika3,
+  } = req.body;
+
+  if (!firebase_uid || !naziv) {
+    return res.status(400).json({ error: "Nedostaju podaci" });
+  }
+
+  try {
+   
+    const [users] = await db.execute(
+      "SELECT id_korisnika FROM korisnik WHERE firebase_uid = ?",
+      [firebase_uid]
+    );
+
+    if (users.length === 0) {
+      return res.status(404).json({ error: "Korisnik ne postoji" });
+    }
+
+    const id_korisnika = users[0].id_korisnika;
+
+
+    await db.execute(
+      `
+      INSERT INTO album
+        (id_korisnika, naziv, opis, slika1, slika2, slika3)
+      VALUES (?, ?, ?, ?, ?, ?)
+      `,
+      [
+        id_korisnika,
+        naziv,
+        opis ?? null,
+        slika1 ?? null,
+        slika2 ?? null,
+        slika3 ?? null,
+      ]
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("ADD ALBUM ERROR:", err);
+    res.status(500).json({ error: "Greška servera" });
+  }
+});
+
+
 export default router;
