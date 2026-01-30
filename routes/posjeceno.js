@@ -3,8 +3,8 @@ import db from "../db.js";
 
 const router = express.Router();
 
-// GET /posjeceno/:firebase_uid
-router.get("/:firebase_uid", async (req, res) => {
+// GET /posjeceno/user/:firebase_uid
+router.get("/user/:firebase_uid", async (req, res) => {
   const { firebase_uid } = req.params;
 
   const [rows] = await db.query(`
@@ -15,12 +15,12 @@ router.get("/:firebase_uid", async (req, res) => {
     WHERE k.firebase_uid = ?
   `, [firebase_uid]);
 
-  res.json(rows); 
+  res.json(rows);
 });
 
 
-// GET /posjeceno/:id_mjesta/:firebase_uid
-router.get("/:id_mjesta/:firebase_uid", async (req, res) => {
+// GET /posjeceno/check/:id_mjesta/:firebase_uid
+router.get("/check/:id_mjesta/:firebase_uid", async (req, res) => {
   const { id_mjesta, firebase_uid } = req.params;
 
   const [[row]] = await db.query(`
@@ -32,6 +32,7 @@ router.get("/:id_mjesta/:firebase_uid", async (req, res) => {
 
   res.json({ posjeceno: row.cnt > 0 });
 });
+
 
 // POST /posjeceno
 router.post("/", async (req, res) => {
