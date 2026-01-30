@@ -65,7 +65,7 @@ router.delete("/:id_objave", async (req, res) => {
 
 
 // POST /album
-router.post("/album", async (req, res) => {
+router.post("", async (req, res) => {
   const {
     firebase_uid,
     naziv,
