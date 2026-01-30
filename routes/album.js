@@ -153,4 +153,44 @@ router.get("/:id_objave", async (req, res) => {
   }
 });
 
+/**
+ * PATCH /album/:id_objave
+ * Update naziv i/ili opis albuma
+ */
+router.patch("/:id_objave", async (req, res) => {
+  const { id_objave } = req.params;
+  const { naziv, opis } = req.body;
+
+  if (!naziv && !opis) {
+    return res.status(400).json({ error: "Nema podataka za update" });
+  }
+
+  try {
+    const fields = [];
+    const values = [];
+
+    if (naziv !== undefined) {
+      fields.push("naziv = ?");
+      values.push(naziv);
+    }
+
+    if (opis !== undefined) {
+      fields.push("opis = ?");
+      values.push(opis);
+    }
+
+    values.push(id_objave);
+
+    await db.query(
+      `UPDATE album SET ${fields.join(", ")} WHERE id_objave = ?`,
+      values
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("GRESKA PATCH /album:", err);
+    res.status(500).json({ error: "Greška servera" });
+  }
+});
+
 export default router;
