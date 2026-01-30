@@ -1,15 +1,14 @@
+import express from "express";
+import db from "../db.js";
+
+const router = express.Router();
+
 router.get("/:firebase_uid", async (req, res) => {
   const { firebase_uid } = req.params;
 
   try {
     const [[user]] = await db.query(
-      `
-      SELECT 
-        id_korisnika,
-        ime_korisnika
-      FROM korisnik
-      WHERE firebase_uid = ?
-      `,
+      "SELECT id_korisnika, ime_korisnika FROM korisnik WHERE firebase_uid = ?",
       [firebase_uid]
     );
 
@@ -23,3 +22,5 @@ router.get("/:firebase_uid", async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 });
+
+export default router;
