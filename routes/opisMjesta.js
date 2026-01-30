@@ -55,32 +55,32 @@ router.get("/opis-mjesta/:id/kategorije", async (req, res) => {
   }
 });
 
-/**
- * 3️⃣ GET /opis-mjesta/:id/komentari
- */
 router.get("/opis-mjesta/:id/komentari", async (req, res) => {
   try {
+    const { id } = req.params;
+
     const [rows] = await db.query(
       `
-      SELECT 
+      SELECT
         k.id_komentara,
         k.id_korisnika,
         ko.ime_korisnika,
         k.tekst
-      FROM komentar k
+      FROM komentari k
       JOIN korisnik ko ON ko.id_korisnika = k.id_korisnika
       WHERE k.id_mjesta = ?
       ORDER BY k.id_komentara DESC
       `,
-      [req.params.id]
+      [id]
     );
 
     res.json(rows);
   } catch (err) {
-    console.error(err);
+    console.error("GRESKA /opis-mjesta/:id/komentari:", err);
     res.status(500).json({ error: "DB error" });
   }
 });
+
 
 /**
  * 4️⃣ GET /opis-mjesta/:id/posjeceno/:firebaseUid
