@@ -116,5 +116,41 @@ router.post("", async (req, res) => {
   }
 });
 
+/**
+ * GET /album/:id_objave
+ * Dohvati jedan album + firebase_uid
+ */
+router.get("/:id_objave", async (req, res) => {
+  const { id_objave } = req.params;
+
+  try {
+    const [rows] = await db.query(
+      `
+      SELECT
+        a.id_objave,
+        a.naziv,
+        a.opis,
+        a.slika1,
+        a.slika2,
+        a.slika3,
+        k.firebase_uid
+      FROM album a
+      JOIN korisnik k ON a.id_korisnika = k.id_korisnika
+      WHERE a.id_objave = ?
+      LIMIT 1
+      `,
+      [id_objave]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Album ne postoji" });
+    }
+
+    res.json(rows[0]);
+  } catch (err) {
+    console.error("GRESKA GET /album/:id_objave", err);
+    res.status(500).json({ error: "Greška servera" });
+  }
+});
 
 export default router;
