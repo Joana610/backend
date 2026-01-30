@@ -98,4 +98,63 @@ router.delete("/", async (req, res) => {
   }
 });
 
+/**
+ * POST /posjeceno
+ * body: { firebase_uid, id_mjesta }
+ */
+router.post("/", async (req, res) => {
+  const { firebase_uid, id_mjesta } = req.body;
+
+  try {
+    // dohvati id_korisnika
+    const [[user]] = await db.query(
+      "SELECT id_korisnika FROM korisnik WHERE firebase_uid = ?",
+      [firebase_uid]
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: "Korisnik ne postoji" });
+    }
+
+    await db.query(
+      "INSERT INTO posjeceno (id_korisnika, id_mjesta) VALUES (?, ?)",
+      [user.id_korisnika, id_mjesta]
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("GRESKA POST /posjeceno:", err);
+    res.status(500).json({ error: "DB error" });
+  }
+});
+
+/**
+ * DELETE /posjeceno
+ * body: { firebase_uid, id_mjesta }
+ */
+router.delete("/", async (req, res) => {
+  const { firebase_uid, id_mjesta } = req.body;
+
+  try {
+    const [[user]] = await db.query(
+      "SELECT id_korisnika FROM korisnik WHERE firebase_uid = ?",
+      [firebase_uid]
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: "Korisnik ne postoji" });
+    }
+
+    await db.query(
+      "DELETE FROM posjeceno WHERE id_korisnika = ? AND id_mjesta = ?",
+      [user.id_korisnika, id_mjesta]
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("GRESKA DELETE /posjeceno:", err);
+    res.status(500).json({ error: "DB error" });
+  }
+});
+
 export default router;
