@@ -4,7 +4,7 @@ import komentariRoutes from "./routes/komentari.js";
 import korisnikRoutes from "./routes/korisnik.js";
 import opisMjestaRoutes from "./routes/opisMjesta.js";
 import posjecenoRoutes from "./routes/posjeceno.js";
-
+import profilRoutes from "./routes/profil.js";
 
 const app = express();
 app.use(express.json());
@@ -14,6 +14,7 @@ app.use("/posjeceno", posjecenoRoutes);
 app.use("/korisnik", korisnikRoutes);
 app.use("/", opisMjestaRoutes);
 app.use("/komentari", komentariRoutes);
+app.use("/profil", profilRoutes);
 
 app.get("/test", (req, res) => {
   res.json({ ok: true });
