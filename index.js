@@ -8,9 +8,6 @@ app.use(express.json());
 app.use("/", homeRoutes);       
 app.use("/posjeceno", posjecenoRoutes);
 
-
-
-
 app.get("/test", (req, res) => {
   res.json({ ok: true });
 });

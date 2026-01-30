@@ -3,38 +3,35 @@ import db from "../db.js";
 
 const router = express.Router();
 
-// GET /posjeceno/user/:firebase_uid
+/**
+ * GET /posjeceno/user/:firebase_uid
+ * Vraća sva mjesta koja je korisnik posjetio
+ */
 router.get("/user/:firebase_uid", async (req, res) => {
   const { firebase_uid } = req.params;
 
-  const [rows] = await db.query(`
-    SELECT m.id_mjesta, m.slika
-    FROM posjeceno p
-    JOIN korisnik k ON p.id_korisnika = k.id_korisnika
-    JOIN mjesto m ON p.id_mjesta = m.id_mjesta
-    WHERE k.firebase_uid = ?
-  `, [firebase_uid]);
+  try {
+    const [rows] = await db.query(
+      `
+      SELECT m.id_mjesta, m.slika
+      FROM posjeceno p
+      JOIN korisnik k ON p.id_korisnika = k.id_korisnika
+      JOIN mjesto m ON p.id_mjesta = m.id_mjesta
+      WHERE k.firebase_uid = ?
+      `,
+      [firebase_uid]
+    );
 
-  res.json(rows);
+    res.json(rows); // ⬅️ MORA BITI ARRAY
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Database error" });
+  }
 });
 
-
-// GET /posjeceno/check/:id_mjesta/:firebase_uid
-router.get("/check/:id_mjesta/:firebase_uid", async (req, res) => {
-  const { id_mjesta, firebase_uid } = req.params;
-
-  const [[row]] = await db.query(`
-    SELECT COUNT(*) AS cnt
-    FROM posjeceno p
-    JOIN korisnik k ON p.id_korisnika = k.id_korisnika
-    WHERE p.id_mjesta = ? AND k.firebase_uid = ?
-  `, [id_mjesta, firebase_uid]);
-
-  res.json({ posjeceno: row.cnt > 0 });
-});
-
-
-// POST /posjeceno
+/**
+ * POST /posjeceno
+ */
 router.post("/", async (req, res) => {
   const { firebase_uid, id_mjesta } = req.body;
 
@@ -51,7 +48,9 @@ router.post("/", async (req, res) => {
   res.json({ success: true });
 });
 
-// DELETE /posjeceno
+/**
+ * DELETE /posjeceno
+ */
 router.delete("/", async (req, res) => {
   const { firebase_uid, id_mjesta } = req.body;
 
