@@ -6,7 +6,8 @@ const app = express();
 app.use(express.json());
 
 app.use("/", homeRoutes);       
-app.use("/", posjecenoRoutes);
+app.use("/posjeceno", posjecenoRoutes);
+
 
 
 
